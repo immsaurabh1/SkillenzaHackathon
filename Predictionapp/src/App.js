@@ -35,13 +35,13 @@ class App extends Component {
             <CssBaseline>
               <JssProvider jss={jss} generateClassName={generateClassName}>
                 <MuiThemeProvider theme={theme}>
-                  <Switch>
+                  {/* <Switch>
                     <Route
                       exact
                       path={["*"]}
                       render={renderProps => <PredictEmployeeAnalysis />}
                     />
-                  </Switch>
+                  </Switch> */}
                   <Route path={["*"]} render={renderProps => <HackAppBar />} />
                 </MuiThemeProvider>
               </JssProvider>
