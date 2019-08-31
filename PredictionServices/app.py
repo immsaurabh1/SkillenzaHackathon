@@ -183,7 +183,48 @@ def get():
         }, {
             "value": "Some of them",
             "id": "Some of them"
-        }]
+        }],
+        "supervisor": [{
+            "value": "Yes",
+            "id": "yes"
+        }, {
+            "value": "No",
+            "id": "no"
+        }, {
+            "value": "Some of them",
+            "id": "Some of them"
+        }],
+        "mental_health_interview": [{
+            "value": "Yes",
+            "id": "yes"
+        }, {
+            "value": "No",
+            "id": "no"
+        }, {
+            "value": "Maybe",
+            "id": "Maybe"
+        }],
+        "phys_health_interview": [{
+            "value": "Yes",
+            "id": "yes"
+        }, {
+            "value": "No",
+            "id": "no"
+        }, {
+            "value": "Maybe",
+            "id": "Maybe"
+        }],
+        "mental_vs_physical": [{
+            "value": "Yes",
+            "id": "yes"
+        }, {
+            "value": "No",
+            "id": "no"
+        }, {
+            "value": "Maybe",
+            "id": "Maybe"
+        }
+        ]
 
     }
 
