@@ -23,206 +23,206 @@ def get():
     return {
         "gender": [{
             "value": "Male",
-            "id": "M"
+            "key": "M"
         }, {
             "value": "Female",
-            "id": "F"
+            "key": "F"
         }, {
             "value": "Others",
-            "id": "O"
+            "key": "O"
         }],
         "work_interfere": [{
             "value": "Often",
-            "id": "often"
+            "key": "often"
         }, {
             "value": "Rarely",
-            "id": "rarely"
+            "key": "rarely"
         }, {
             "value": "Never",
-            "id": "never"
+            "key": "never"
         }],
         "self_employed": [{
             "value": "Yes",
-            "id": "yes"
+            "key": "yes"
         }, {
             "value": "No",
-            "id": "no"
+            "key": "no"
         }],
         "family_history": [{
             "value": "Yes",
-            "id": "yes"
+            "key": "yes"
         }, {
             "value": "No",
-            "id": "no"
+            "key": "no"
         }],
         "no_employees": [{
             "value": "1-5",
-            "id": "1-5"
+            "key": "1-5"
         }, {
             "value": "6-25",
-            "id": "6-25"
+            "key": "6-25"
         },
             {
             "value": "26-100",
-            "id": "26-100"
+            "key": "26-100"
         }, {
             "value": "100-500",
-            "id": "100-500"
+            "key": "100-500"
         },
             {
             "value": "More than 1000",
-            "id": "More than 1000"
+            "key": "More than 1000"
         }
         ],
         "remote_work": [{
             "value": "Yes",
-            "id": "yes"
+            "key": "yes"
         }, {
             "value": "No",
-            "id": "no"
+            "key": "no"
         }],
         "tech_company": [{
             "value": "Yes",
-            "id": "yes"
+            "key": "yes"
         }, {
             "value": "No",
-            "id": "no"
+            "key": "no"
         }],
         "benefits": [{
             "value": "Yes",
-            "id": "yes"
+            "key": "yes"
         }, {
             "value": "No",
-            "id": "no"
+            "key": "no"
         }, {
             "value": "Don't know",
-            "id": "Don't know"
+            "key": "Don't know"
         }],
         "care_options": [{
             "value": "Yes",
-            "id": "yes"
+            "key": "yes"
         }, {
             "value": "No",
-            "id": "no"
+            "key": "no"
         }, {
             "value": "Not sure",
-            "id": "Not sure"
+            "key": "Not sure"
         }],
         "wellness_program": [{
             "value": "Yes",
-            "id": "yes"
+            "key": "yes"
         }, {
             "value": "No",
-            "id": "no"
+            "key": "no"
         }, {
             "value": "Don't know",
-            "id": "Don't know"
+            "key": "Don't know"
         }],
         "seek_help": [{
             "value": "Yes",
-            "id": "yes"
+            "key": "yes"
         }, {
             "value": "No",
-            "id": "no"
+            "key": "no"
         }, {
             "value": "Don't know",
-            "id": "Don't know"
+            "key": "Don't know"
         }],
         "anonymity": [{
             "value": "Yes",
-            "id": "yes"
+            "key": "yes"
         }, {
             "value": "No",
-            "id": "no"
+            "key": "no"
         }, {
             "value": "Don't know",
-            "id": "Don't know"
+            "key": "Don't know"
         }],
         "leave": [{
             "value": "Somewhat easy",
-            "id": "Somewhat easy"
+            "key": "Somewhat easy"
         }, {
             "value": "Somewhat difficult",
-            "id": "Somewhat difficult"
+            "key": "Somewhat difficult"
         }, {
             "value": "Don't know",
-            "id": "Don't know"
+            "key": "Don't know"
         }, {
             "value": "Very difficult",
-            "id": "Very difficult"
+            "key": "Very difficult"
         }, {
             "value": "Very easy",
-            "id": "Very easy"
+            "key": "Very easy"
         }
         ], "mental_health_consequence": [{
             "value": "Yes",
-            "id": "yes"
+            "key": "yes"
         }, {
             "value": "No",
-            "id": "no"
+            "key": "no"
         }, {
             "value": "Maybe",
-            "id": "Maybe"
+            "key": "Maybe"
         }],
         "phys_health_consequence": [{
             "value": "Yes",
-            "id": "yes"
+            "key": "yes"
         }, {
             "value": "No",
-            "id": "no"
+            "key": "no"
         }, {
             "value": "Maybe",
-            "id": "Maybe"
+            "key": "Maybe"
         }],
         "coworkers": [{
             "value": "Yes",
-            "id": "yes"
+            "key": "yes"
         }, {
             "value": "No",
-            "id": "no"
+            "key": "no"
         }, {
             "value": "Some of them",
-            "id": "Some of them"
+            "key": "Some of them"
         }],
         "supervisor": [{
             "value": "Yes",
-            "id": "yes"
+            "key": "yes"
         }, {
             "value": "No",
-            "id": "no"
+            "key": "no"
         }, {
             "value": "Some of them",
-            "id": "Some of them"
+            "key": "Some of them"
         }],
         "mental_health_interview": [{
             "value": "Yes",
-            "id": "yes"
+            "key": "yes"
         }, {
             "value": "No",
-            "id": "no"
+            "key": "no"
         }, {
             "value": "Maybe",
-            "id": "Maybe"
+            "key": "Maybe"
         }],
         "phys_health_interview": [{
             "value": "Yes",
-            "id": "yes"
+            "key": "yes"
         }, {
             "value": "No",
-            "id": "no"
+            "key": "no"
         }, {
             "value": "Maybe",
-            "id": "Maybe"
+            "key": "Maybe"
         }],
         "mental_vs_physical": [{
             "value": "Yes",
-            "id": "yes"
+            "key": "yes"
         }, {
             "value": "No",
-            "id": "no"
+            "key": "no"
         }, {
             "value": "Maybe",
-            "id": "Maybe"
+            "key": "Maybe"
         }
         ]
 
@@ -238,7 +238,7 @@ def post():
     print(content['name'])
     return {
         "name": "tdwdvw",
-        "id": "asasx"
+        "key": "asasx"
     }
 
 
