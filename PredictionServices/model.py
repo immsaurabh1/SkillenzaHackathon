@@ -22,14 +22,14 @@ app = Flask(__name__)  # , static_url_path='/static'
 # loading label encoder
 le = LabelEncoder()
 le.classes_ = np.load(
-    '/Users/saurabh/Desktop/Hackathon/classes_hack.npy', allow_pickle=True)
+    'classes_hack.npy', allow_pickle=True)
 
 # loading One Hot Encoder
-with open('/Users/saurabh/Desktop/Hackathon/ohe.pkl', 'rb') as fid:
+with open('ohe.pkl', 'rb') as fid:
     ohe = pickle.load(fid)
 
 # loading the model
-with open('/Users/saurabh/Desktop/Hackathon/clf_cat.pkl', 'rb') as fid:
+with open('clf_cat.pkl', 'rb') as fid:
     clf_cat = pickle.load(fid)
 
 
