@@ -119,7 +119,9 @@ class PredictEmployee extends React.Component {
 
   componentDidMount() {
     const getData = async () => {
-      const response = await Axios.get("http://127.0.0.1:5000/getParams");
+      const response = await Axios.get("http://127.0.0.1:5000/getParams", {
+        headers: { "Access-Control-Allow-Origin": "*" }
+      });
       if (response.status === 200) {
         console.log(response.data);
         let paramsObj = {};

@@ -1,21 +1,30 @@
+import warnings
 from flask import Flask, render_template
 from flask import request
 from flask import jsonify
 from flask import Flask
+from flask_cors import CORS
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
 from keras.models import load_model
 import pickle
 import tensorflow as tf
-import warnings
+app = Flask(__name__)
+CORS(app)
 warnings.filterwarnings('ignore')
 
+
+# def options(self, *args, **kwargs):
+#     self.response.headers['Access-Control-Allow-Origin'] = '*'
+#     self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+#     self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
 # importing flask libraries
+
 
 graph = tf.get_default_graph()
 
-app = Flask(__name__)  # , static_url_path='/static'
+# app = Flask(__name__)  # , static_url_path='/static'
 #ROOT_FOLDER = "/home/ubuntu/flask/"
 
 
@@ -86,7 +95,6 @@ if __name__ == '__main__':
 
 @app.route('/getParams', methods=['GET'])
 def get():
-    print(request.is_json)
     # content = request.get_json()
     # print(content)c
     # print(request.get_json())
@@ -98,7 +106,7 @@ def get():
     # 'mental_health_consequence', 'phys_health_consequence', 'coworkers',
     # 'supervisor', 'mental_health_interview', 'phys_health_interview',
     # 'mental_vs_physical', 'obs_consequence'
-    return {
+    response = jsonify({
         "gender": [{
             "value": "Male",
             "key": "M"
@@ -216,6 +224,13 @@ def get():
             "value": "Don't know",
             "key": "Don't know"
         }],
+        "obs_consequence": [{
+            "value": "Yes",
+            "key": "yes"
+        }, {
+            "value": "No",
+            "key": "no"
+        }],
         "leave": [{
             "value": "Somewhat easy",
             "key": "Somewhat easy"
@@ -302,6 +317,182 @@ def get():
             "value": "Maybe",
             "key": "Maybe"
         }
-        ]
+        ], "phys_health_interview": [{
+            "value": "Yes",
+            "key": "yes"
+        }, {
+            "value": "No",
+            "key": "no"
+        }, {
+            "value": "Maybe",
+            "key": "Maybe"
+        }],
+        "country": [{
+            "value": "Canada",
+            "key": "Canada",
+            "states": ["AB",
+                       "BC",
+                       "MB",
+                       "NB",
+                       "NL",
+                       "NT",
+                       "NS",
+                       "NU",
+                       "ON",
+                       "PE",
+                       "QC",
+                       "SK",
+                       "YT"]
+        }, {
+            "value": "United States",
+            "key": "United States",
+            "states": ["AL",
+                       "AK",
+                       "AZ",
+                       "AR",
+                       "AA",
+                       "AE",
+                       "AP",
+                       "CA",
+                       "CO",
+                       "CT",
+                       "DE",
+                       "DC",
+                       "FL",
+                       "GA",
+                       "HI",
+                       "ID",
+                       "PA",
+                       "RI",
+                       "SC",
+                       "SD",
+                       "TX",
+                       "UT",
+                       "VT",
+                       "VA",
+                       "WA",
+                       "WV",
+                       "WI",
+                       "WY"]
+        }, {
+            "value": "United Kingdom",
+            "key": "United Kingdom"
+        },
+            {
+            "value": "Germany",
+            "key": "Germany"
+        }, {
+            "value": "Netherlands",
+            "key": "Netherlands"
+        }, {
+            "value": "Australia",
+            "key": "Australia"
+        }, {
+            "value": "Ireland",
+            "key": "Ireland"
+        }, {
+            "value": "France",
+            "key": "France"
+        }, {
+            "value": "India",
+            "key": "India"
+        }, {
+            "value": "Sweden",
+            "key": "Sweden"
+        }, {
+            "value": "Switzerland",
+            "key": "Switzerland"
+        }, {
+            "value": "New Zealand",
+            "key": "New Zealand"
+        }, {
+            "value": "Italy",
+            "key": "Italy"
+        }, {
+            "value": "Poland",
+            "key": "Poland"
+        }, {
+            "value": "Belgium",
+            "key": "Belgium"
+        }, {
+            "value": "South Africa",
+            "key": "South Africa"
+        }, {
+            "value": "Brazil",
+            "key": "Brazil"
+        }, {
+            "value": "Bulgaria",
+            "key": "Bulgaria"
+        }, {
+            "value": "Mexico",
+            "key": "Mexico"
+        }, {
+            "value": "Israel",
+            "key": "Israel"
+        }, {
+            "value": "Russia",
+            "key": "Russia"
+        }, {
+            "value": "Austria",
+            "key": "Austria"
+        }, {
+            "value": "Denmark",
+            "key": "Denmark"
+        }, {
+            "value": "Finland",
+            "key": "Finland"
+        }, {
+            "value": "Singapore",
+            "key": "Singapore"
+        }, {
+            "value": "Portugal",
+            "key": "Portugal"
+        }, {
+            "value": "Slovenia",
+            "key": "Slovenia"
+        }, {
+            "value": "Costa Rica",
+            "key": "Costa Rica"
+        }, {
+            "value": "Thailand",
+            "key": "Thailand"
+        }, {
+            "value": "Croatia",
+            "key": "Croatia"
+        }, {
+            "value": "Colombia",
+            "key": "Colombia"
+        }, {
+            "value": "Spain",
+            "key": "Spain"
+        }, {
+            "value": "Latvia",
+            "key": "Latvia"
+        }, {
+            "value": "Uruguay",
+            "key": "Uruguay"
+        }, {
+            "value": "Nigeria",
+            "key": "Nigeria"
+        }, {
+            "value": "Japan",
+            "key": "Japan"
+        }, {
+            "value": "Hungary",
+            "key": "Hungary"
+        }, {
+            "value": "Norway",
+            "key": "Norway"
+        }, {
+            "value": "Zimbabwe",
+            "key": "Zimbabwe"
+        }, {
+            "value": "Romania",
+            "key": "Romania"
+        }
+        ],
 
-    }
+    })
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+    # return
