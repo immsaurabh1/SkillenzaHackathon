@@ -15,17 +15,10 @@ CORS(app)
 warnings.filterwarnings('ignore')
 
 
-# def options(self, *args, **kwargs):
-#     self.response.headers['Access-Control-Allow-Origin'] = '*'
-#     self.response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-#     self.response.headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE'
 # importing flask libraries
 
 
 graph = tf.get_default_graph()
-
-# app = Flask(__name__)  # , static_url_path='/static'
-#ROOT_FOLDER = "/home/ubuntu/flask/"
 
 
 # loading label encoder
@@ -82,7 +75,8 @@ def process():
         X = pd.DataFrame(X)
         prediction = clf_cat.predict(X)
         prediction = [int(i) for i in prediction]
-        answer = {'output': prediction[0]}
+        answer = jsonify({'output': prediction[0]})
+        answer.headers.add('Access-Control-Allow-Origin', '*')
         return(answer)
 
 
