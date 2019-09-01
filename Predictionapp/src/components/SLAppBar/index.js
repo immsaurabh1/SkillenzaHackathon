@@ -10,9 +10,10 @@ import Menu from "@material-ui/core/Menu";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import ArrowDropDownSharp from "@material-ui/icons/ArrowDropDown";
 import Tooltip from "@material-ui/core/Tooltip";
+import { Typography } from "@material-ui/core";
 const SLAppLogo = styled.img`
-  max-height: 22px;
-  padding: 0;
+  width: 68px;
+  border: 1px solid #80808087;
 `;
 const SLStyledGridItem = styled(Grid)`
   && {
@@ -44,6 +45,11 @@ const SlMenu = styled(Menu)`
     max-width: 200px;
   }
 `;
+const SLTypography = styled(Typography)`
+  .my-class-name {
+    color: white;
+  }
+`;
 class HackAppBar extends React.Component {
   constructor(props) {
     super(props);
@@ -56,16 +62,15 @@ class HackAppBar extends React.Component {
           {" "}
           <Toolbar>
             <SLAppLogo
-              src="https://static.shortlyst.com/assets/campaigns/Shopalyst_White_RobotoCondensed_1533899706853.png"
+              src="https://yt3.ggpht.com/a/AGF-l78nkJQpo5K8eXcH_-lQyAZZqM-tW4OG_7Ojpw=s900-c-k-c0xffffffff-no-rj-mo"
               alt="Logo"
             />
+            <SLTypography classes={{ h2: "my-class-name" }} variant="h2">
+              Medi Treat Survey
+            </SLTypography>
           </Toolbar>
         </AppBar>
-        <div>
-          <AppBar position="fixed" color="default">
-            <Toolbar></Toolbar>
-          </AppBar>
-        </div>
+        <div></div>
       </div>
     );
   }

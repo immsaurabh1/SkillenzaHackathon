@@ -272,7 +272,7 @@ class PredictEmployee extends React.Component {
               aria-controls="panel1bh-content"
               id="panel1bh-header"
             >
-              <Typography>Basic Details</Typography>
+              <Typography variant="h6">Basic Details</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <SLGridContainer container>
@@ -345,7 +345,9 @@ class PredictEmployee extends React.Component {
               aria-controls="panel1bh-content"
               id="panel1bh-header"
             >
-              <Typography>Some Questions Related To Work Life</Typography>
+              <Typography variant="h6">
+                Some Questions Related To Work Life
+              </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <SLGridContainer container>
@@ -451,7 +453,9 @@ class PredictEmployee extends React.Component {
               aria-controls="panel1bh-content"
               id="panel1bh-header"
             >
-              <Typography>Some Questions Related To Work Life</Typography>
+              <Typography variant="h6">
+                Some Questions Related To Work Life
+              </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <SLGridContainer container>
@@ -529,7 +533,7 @@ class PredictEmployee extends React.Component {
               aria-controls="panel1bh-content"
               id="panel1bh-header"
             >
-              <Typography>Some Other General Questions</Typography>
+              <Typography variant="h6">Some Other General Questions</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <SLGridContainer container>
@@ -598,7 +602,7 @@ class PredictEmployee extends React.Component {
               aria-controls="panel1bh-content"
               id="panel1bh-header"
             >
-              <Typography>Any Other comments</Typography>
+              <Typography variant="h6">Any Other comments</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <SLGridContainer container>
