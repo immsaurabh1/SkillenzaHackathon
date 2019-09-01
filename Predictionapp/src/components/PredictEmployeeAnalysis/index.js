@@ -5,6 +5,7 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import styled from "styled-components";
 import SLBox from "../SLBoxContainer";
 import SLDropdown from "../SLDropdown";
+import SLAlert from "../SLAlert";
 import Axios from "axios";
 import countryList from "react-select-country-list";
 import TextField from "@material-ui/core/TextField";
@@ -16,6 +17,25 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+
+import grey from "@material-ui/core/colors/grey";
+const headerBackground = grey[300];
+
+const SLPageSubHeader = styled.h3`
+  text-align: left;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  padding-bottom: 15px;
+  border-bottom: 1px solid ${headerBackground};
+`;
+const SLFormControlLabel = styled(FormControlLabel)`
+  font-size: 16px;
+`;
 const SLDropDownGrid = styled(Grid)`
   padding: 0px 10px;
 `;
@@ -107,21 +127,20 @@ class PredictEmployee extends React.Component {
       selectedState: { key: "", value: "" },
       obs_consequence: [],
       selectedObs_consequence: { key: "", value: "" },
-      panel1: false,
+      panel1: true,
       panel2: false,
       panel3: false,
       panel4: false,
       panel5: false,
-      comments: ""
+      comments: "",
+      errorMessage: ""
     };
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
   }
 
   componentDidMount() {
     const getData = async () => {
-      const response = await Axios.get("http://127.0.0.1:5000/getParams", {
-        headers: { "Access-Control-Allow-Origin": "*" }
-      });
+      const response = await Axios.get("http://127.0.0.1:5000/getParams");
       if (response.status === 200) {
         console.log(response.data);
         let paramsObj = {};
@@ -181,6 +200,94 @@ class PredictEmployee extends React.Component {
     };
     getData();
   }
+  postModelData = async () => {
+    let finalObj = {};
+    finalObj.Age = Number(this.state.age);
+    finalObj.Gender = this.state.selectedGender.key;
+    finalObj.Country = this.state.selectedCountry.value;
+    finalObj.state = this.state.selectedState.value;
+    finalObj.self_employed = this.state.selectedSelf_employed.key;
+    finalObj.family_history = this.state.selectedFamily_history.key;
+    finalObj.work_interfere = this.state.selectedWork_interfere.key;
+    finalObj.no_employees = this.state.selectedNo_employees.key;
+    finalObj.remote_work = this.state.selectedRemote_work.key;
+    finalObj.tech_company = this.state.selectedTech_company.key;
+    finalObj.benefits = this.state.selectedbenefits.key;
+    finalObj.care_options = this.state.selectedCare_options.key;
+    finalObj.wellness_program = this.state.selectedWellness_program.key;
+    finalObj.seek_help = this.state.selectedSeek_help.key;
+    finalObj.anonymity = this.state.selectedAnonymity.key;
+    finalObj.leave = this.state.selectedLeave.key;
+    finalObj.mental_health_consequence = this.state.selectedMental_health_consequence.key;
+    finalObj.phys_health_consequence = this.state.selectedPhys_health_consequence.key;
+    finalObj.coworkers = this.state.selectedCoworkers.key;
+    finalObj.supervisor = this.state.selectedSupervisor.key;
+    finalObj.mental_health_interview = this.state.selectedMental_health_interview.key;
+    finalObj.phys_health_interview = this.state.selectedPhys_health_interview.key;
+    finalObj.mental_vs_physical = this.state.selectedMental_vs_physical.key;
+    finalObj.obs_consequence = this.state.selectedObs_consequence.key;
+    finalObj.comments = this.state.comments;
+    if (
+      !finalObj.Age ||
+      !finalObj.Gender ||
+      !finalObj.Country ||
+      !finalObj.state
+    ) {
+      this.showErrorMessage("Please answer all the question in Basic section");
+      return;
+    }
+    if (
+      !finalObj.work_interfere ||
+      !finalObj.wellness_program ||
+      !finalObj.tech_company ||
+      !finalObj.supervisor ||
+      !finalObj.self_employed ||
+      !finalObj.coworkers ||
+      !finalObj.leave ||
+      !finalObj.remote_work ||
+      !finalObj.no_employees
+    ) {
+      this.showErrorMessage(
+        "Please answer all the question in Work Life section"
+      );
+      return;
+    }
+    if (
+      !finalObj.phys_health_interview ||
+      !finalObj.mental_health_interview ||
+      !finalObj.mental_health_consequence ||
+      !finalObj.phys_health_consequence ||
+      !finalObj.mental_vs_physical ||
+      !finalObj.obs_consequence
+    ) {
+      this.showErrorMessage(
+        "Please answer all the question in Physical and Mental Issues in Life section"
+      );
+      return;
+    }
+    if (
+      !finalObj.anonymity ||
+      !finalObj.benefits ||
+      !finalObj.care_options ||
+      !finalObj.family_history ||
+      !finalObj.seek_help
+    ) {
+      this.showErrorMessage(
+        "Please answer all the question in section service provided by employer"
+      );
+      return;
+    }
+    const response = await Axios.post(
+      "http://127.0.0.1:5000/getPrediction",
+      finalObj
+    );
+    debugger;
+    if (response.status === 200) {
+      console.log("success");
+    } else {
+      console.log("faliure", response);
+    }
+  };
   handleDropdownChange = data => {
     console.log(data);
     this.setState({
@@ -258,11 +365,27 @@ class PredictEmployee extends React.Component {
       }
     );
   }
+  showErrorMessage(message) {
+    this.setState(
+      {
+        errorMessage: ""
+      },
+      () => {
+        this.setState({
+          errorMessage: message
+        });
+      }
+    );
+  }
   render() {
     return (
       <SLBox>
         <SlDiv>
-          {" "}
+          {this.state.errorMessage.length ? (
+            <SLAlert type="error" message={this.state.errorMessage} />
+          ) : (
+            ""
+          )}
           <ExpansionPanel
             expanded={this.state.panel1}
             onChange={ev => this.handleChange("panel1", this.state.panel1)}
@@ -272,7 +395,7 @@ class PredictEmployee extends React.Component {
               aria-controls="panel1bh-content"
               id="panel1bh-header"
             >
-              <Typography variant="h6">Basic Details</Typography>
+              <Typography variant="h5">Basic Details</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <SLGridContainer container>
@@ -345,8 +468,9 @@ class PredictEmployee extends React.Component {
               aria-controls="panel1bh-content"
               id="panel1bh-header"
             >
-              <Typography variant="h6">
-                Some Questions Related To Work Life
+              <Typography variant="h5">
+                {" "}
+                Questions Related To Work Life
               </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
@@ -453,12 +577,48 @@ class PredictEmployee extends React.Component {
               aria-controls="panel1bh-content"
               id="panel1bh-header"
             >
-              <Typography variant="h6">
-                Some Questions Related To Work Life
+              <Typography variant="h5">
+                Questions Related To Mental and Physical issues in Life
               </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <SLGridContainer container>
+                {/* <SLPageSubHeader>
+                  Select Your Marketing Objective
+                </SLPageSubHeader>
+                <Grid container>
+                  <Grid item md={12}>
+                    <FormControl component="fieldset">
+                      <RadioGroup
+                        aria-label="Marketing Type"
+                        name="marketingType"
+                        value={this.state.marketingType}
+                        onChange={this.handleChange}
+                        row
+                      >
+                        <SLFormControlLabel
+                          value="listType"
+                          control={<Radio />}
+                          label={
+                            <Typography style={{ fontSize: "22px" }}>
+                              Pick One From The List
+                            </Typography>
+                          }
+                        />
+                        <SLFormControlLabel
+                          value="templateType"
+                          control={<Radio />}
+                          label={
+                            <Typography style={{ fontSize: "22px" }}>
+                              Pick From A Template
+                            </Typography>
+                          }
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  </Grid>
+                </Grid> */}
+
                 <SLDropDownGrid item xs={2} md={4}>
                   <SLDropdown
                     name="selectedPhys_health_interview"
@@ -533,7 +693,9 @@ class PredictEmployee extends React.Component {
               aria-controls="panel1bh-content"
               id="panel1bh-header"
             >
-              <Typography variant="h6">Some Other General Questions</Typography>
+              <Typography variant="h5">
+                Questions related to services provided by employer
+              </Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <SLGridContainer container>
@@ -602,7 +764,7 @@ class PredictEmployee extends React.Component {
               aria-controls="panel1bh-content"
               id="panel1bh-header"
             >
-              <Typography variant="h6">Any Other comments</Typography>
+              <Typography variant="h5">Any Suggestions / Comments</Typography>
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <SLGridContainer container>
@@ -626,9 +788,9 @@ class PredictEmployee extends React.Component {
             <SLStyledButton
               variant="contained"
               color="primary"
-              onClick={() => this.saveAudienceData()}
+              onClick={() => this.postModelData()}
             >
-              Save
+              get Prediction
             </SLStyledButton>
           </SlButtonFloatingPaper>
         </SlDiv>

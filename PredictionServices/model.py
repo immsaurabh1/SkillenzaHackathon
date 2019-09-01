@@ -13,23 +13,15 @@ import tensorflow as tf
 app = Flask(__name__)
 CORS(app)
 warnings.filterwarnings('ignore')
-
-
 # importing flask libraries
-
-
 graph = tf.get_default_graph()
-
-
 # loading label encoder
 le = LabelEncoder()
 le.classes_ = np.load(
     'classes_hack.npy', allow_pickle=True)
-
 # loading One Hot Encoder
 with open('ohe.pkl', 'rb') as fid:
     ohe = pickle.load(fid)
-
 # loading the model
 with open('clf_cat.pkl', 'rb') as fid:
     clf_cat = pickle.load(fid)
@@ -38,8 +30,20 @@ with open('clf_cat.pkl', 'rb') as fid:
 @app.route('/getPrediction', methods=['POST'])
 def process():
     if request.method == 'POST':
+        print(request.is_json)
+        response = request.get_json()
+        if 'comments' not in response:
+            response['comments'] = "Empty"
+        if 'work_interfere' not in response:
+            response['work_interfere'] = "O"
+        if 'state' not in response:
+            response['state'] = "CA"
+        if 'sel_employed' not in response:
+            response['sel_employed'] = "No"
+        if (response['Age'] < 1) & (response['Age'] > 100):
+            response['Age'] = 32
         # {'Age': 44,'Gender': "M",'Country': "United States",'state': "IN",'self_employed': "No",'family_history': "No",
-        response = request.args.get('q')
+        # response = request.args.get('q')
 # 'work_interfere': "Rarely",'no_employees': "More than 1000",'remote_work': "No",'tech_company': "No",'benefits': "Don't know",'care_options': "No",
 # 'wellness_program': "Don't know",'seek_help': "Don't know",'anonymity': "Don't know",'leave': "Don't know",
 # 'mental_health_consequence': "Maybe",'phys_health_consequence': "No",'coworkers': "No",'supervisor': "No",'mental_health_interview': "No",
@@ -64,13 +68,13 @@ def process():
         dataset['g'] = dataset['family_history'] + '-' + dataset['benefits']
         dataset['h'] = dataset['family_history'] + \
             '-' + dataset['care_options']
-
+        dataset['m'] = dataset['work_interfere'] + '-' + \
+            dataset['family_history'] + '-' + dataset['self_employed']
         X = dataset[['family_history', 'benefits', 'care_options', 'mental_health_interview',
-                     'obs_consequence', 'self_employed', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']]
-
+                     'obs_consequence', 'self_employed', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'm']]
         for column in X.columns:
             X[column] = le.fit_transform(X[column])
-
+        print(X)
         X = ohe.transform(X).toarray()
         X = pd.DataFrame(X)
         prediction = clf_cat.predict(X)
@@ -485,7 +489,6 @@ def get():
             "key": "Romania"
         }
         ],
-
     })
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response

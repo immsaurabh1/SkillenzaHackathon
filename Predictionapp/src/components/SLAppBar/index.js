@@ -14,6 +14,7 @@ import { Typography } from "@material-ui/core";
 const SLAppLogo = styled.img`
   width: 68px;
   border: 1px solid #80808087;
+  border-radius: 50%;
 `;
 const SLStyledGridItem = styled(Grid)`
   && {
@@ -46,8 +47,9 @@ const SlMenu = styled(Menu)`
   }
 `;
 const SLTypography = styled(Typography)`
-  .my-class-name {
+  &.my-class-name {
     color: white;
+    margin-left: 20px;
   }
 `;
 class HackAppBar extends React.Component {
@@ -65,8 +67,8 @@ class HackAppBar extends React.Component {
               src="https://yt3.ggpht.com/a/AGF-l78nkJQpo5K8eXcH_-lQyAZZqM-tW4OG_7Ojpw=s900-c-k-c0xffffffff-no-rj-mo"
               alt="Logo"
             />
-            <SLTypography classes={{ h2: "my-class-name" }} variant="h2">
-              Medi Treat Survey
+            <SLTypography classes={{ h4: "my-class-name" }} variant="h4">
+              Medi + Treat Survey
             </SLTypography>
           </Toolbar>
         </AppBar>
