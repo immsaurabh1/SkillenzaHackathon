@@ -151,7 +151,7 @@ class PredictEmployee extends React.Component {
 
   componentDidMount() {
     const getData = async () => {
-      const response = await Axios.get("http://127.0.0.1:5000/getParams");
+      const response = await Axios.get("http://40.121.16.237/getParams");
       if (response.status === 200) {
         console.log(response.data);
         let paramsObj = {};
@@ -289,7 +289,7 @@ class PredictEmployee extends React.Component {
       return;
     }
     const response = await Axios.post(
-      "http://127.0.0.1:5000/getPrediction",
+      "http://40.121.16.237/getPrediction",
       finalObj
     );
     debugger;
