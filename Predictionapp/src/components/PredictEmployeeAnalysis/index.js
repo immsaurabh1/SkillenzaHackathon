@@ -21,7 +21,11 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
-
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import grey from "@material-ui/core/colors/grey";
 const headerBackground = grey[300];
 
@@ -64,6 +68,9 @@ const SlButtonFloatingPaper = styled(Paper)`
 `;
 const SlDiv = styled.div`
   // position: relative;
+`;
+const TreatmentGrid = styled(Grid)`
+  margin-top: 20px;
 `;
 class PredictEmployee extends React.Component {
   constructor(props) {
@@ -133,9 +140,13 @@ class PredictEmployee extends React.Component {
       panel4: false,
       panel5: false,
       comments: "",
-      errorMessage: ""
+      errorMessage: "",
+      predictedAns: 0,
+      open: false,
+      dialogContent: ""
     };
     this.handleDropdownChange = this.handleDropdownChange.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
   componentDidMount() {
@@ -284,6 +295,17 @@ class PredictEmployee extends React.Component {
     debugger;
     if (response.status === 200) {
       console.log("success");
+      if (response.data.output === 1) {
+        this.setState({
+          open: true,
+          dialogContent: "The employee needs the treatment"
+        });
+      } else {
+        this.setState({
+          open: true,
+          dialogContent: "The employee doesnot need the treatment"
+        });
+      }
     } else {
       console.log("faliure", response);
     }
@@ -312,6 +334,12 @@ class PredictEmployee extends React.Component {
   textFieldchange(value, prop) {
     this.setState({
       [prop]: value
+    });
+  }
+  handleClose() {
+    let open = JSON.parse(JSON.stringify(this.state.open));
+    this.setState({
+      open: !open
     });
   }
   handleChange(prop, value) {
@@ -402,8 +430,8 @@ class PredictEmployee extends React.Component {
                 <SLDropDownGrid item xs={2} md={4}>
                   <SLStyledTextfield
                     id="standard-with-placeholder"
-                    label="Enter Age"
-                    placeholder="Enter Age"
+                    label="What is your Age?"
+                    placeholder="What is your Age?"
                     margin="normal"
                     value={this.state.age}
                     ref="age"
@@ -432,7 +460,7 @@ class PredictEmployee extends React.Component {
                     selectedItem={this.state.selectedGender}
                     data={this.state.gender}
                     action={this.handleDropdownChange}
-                    title="Select Gender"
+                    title="What is your Gender?"
                     classes={{ formControl: "sl-root-input" }}
                   />
                 </SLDropDownGrid>
@@ -442,7 +470,7 @@ class PredictEmployee extends React.Component {
                     selectedItem={this.state.selectedCountry}
                     data={this.state.options}
                     action={this.handleDropdownChange}
-                    title="Select Country"
+                    title="What is your country?"
                     classes={{ formControl: "sl-root-input" }}
                   />
                 </SLDropDownGrid>
@@ -453,6 +481,16 @@ class PredictEmployee extends React.Component {
                     data={this.state.states}
                     action={this.handleDropdownChange}
                     title="Which state or territory do you live in?"
+                    classes={{ formControl: "sl-root-input" }}
+                  />
+                </SLDropDownGrid>
+                <SLDropDownGrid item xs={2} md={4}>
+                  <SLDropdown
+                    name="selectedFamily_history"
+                    selectedItem={this.state.selectedFamily_history}
+                    data={this.state.family_history}
+                    action={this.handleDropdownChange}
+                    title="Do you have a family history of mental illness? "
                     classes={{ formControl: "sl-root-input" }}
                   />
                 </SLDropDownGrid>
@@ -741,17 +779,6 @@ class PredictEmployee extends React.Component {
                     classes={{ formControl: "sl-root-input" }}
                   />
                 </SLDropDownGrid>
-
-                <SLDropDownGrid item xs={2} md={4}>
-                  <SLDropdown
-                    name="selectedFamily_history"
-                    selectedItem={this.state.selectedFamily_history}
-                    data={this.state.family_history}
-                    action={this.handleDropdownChange}
-                    title="Do you have a family history of mental illness? "
-                    classes={{ formControl: "sl-root-input" }}
-                  />
-                </SLDropDownGrid>
               </SLGridContainer>
             </ExpansionPanelDetails>
           </ExpansionPanel>
@@ -784,6 +811,34 @@ class PredictEmployee extends React.Component {
               </SLGridContainer>
             </ExpansionPanelDetails>
           </ExpansionPanel>
+          <Dialog
+            open={this.state.open}
+            onClose={this.handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">{"Survey Result"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {this.state.dialogContent}{" "}
+                {/* <p>The Employee needs the Treatment</p> */}
+              </DialogContentText>
+            </DialogContent>
+          </Dialog>
+          {/* <TreatmentGrid container justify="center">
+            <SLDropDownGrid item xs={6} md={4}>
+              <Typography variant="body1" color="textPrimary">
+                {" "}
+                The Employee needs the Treatment
+              </Typography>
+            </SLDropDownGrid>
+            <SLDropDownGrid item xs={6} md={4}>
+              <Typography variant="body1" color="textSecondary">
+                {" "}
+                The Employee doesnot need the Treatment
+              </Typography>
+            </SLDropDownGrid>
+          </TreatmentGrid> */}
           <SlButtonFloatingPaper>
             <SLStyledButton
               variant="contained"
