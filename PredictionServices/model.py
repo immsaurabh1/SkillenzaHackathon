@@ -1,3 +1,5 @@
+from catboost import Pool, CatBoostClassifier
+from sklearn.preprocessing import OneHotEncoder
 import warnings
 from flask import Flask, render_template
 from flask import request
@@ -15,16 +17,54 @@ CORS(app)
 warnings.filterwarnings('ignore')
 # importing flask libraries
 graph = tf.get_default_graph()
-# loading label encoder
-le = LabelEncoder()
-le.classes_ = np.load(
-    'classes_hack.npy', allow_pickle=True)
-# loading One Hot Encoder
-with open('ohe.pkl', 'rb') as fid:
-    ohe = pickle.load(fid)
-# loading the model
-with open('clf_cat.pkl', 'rb') as fid:
-    clf_cat = pickle.load(fid)
+# # loading label encoder
+# le = LabelEncoder()
+# le.classes_ = np.load(
+#     'classes_hack.npy', allow_pickle=True)
+# # loading One Hot Encoder
+# with open('ohe.pkl', 'rb') as fid:
+#     ohe = pickle.load(fid)
+# # loading the model
+# with open('clf_cat.pkl', 'rb') as fid:
+#     clf_cat = pickle.load(fid)
+dataset = pd.read_csv(
+    'trainms.csv')
+dataset.loc[dataset[dataset['self_employed'].isnull()].index,
+            'self_employed'] = 'No'
+dataset.loc[dataset[dataset['state'].isnull()].index, 'state'] = 'CA'
+dataset.loc[dataset[dataset['work_interfere'].isnull()].index,
+            'work_interfere'] = 'O'
+dataset['a'] = dataset['work_interfere'] + '-' + dataset['family_history']
+dataset['b'] = dataset['work_interfere'] + '-' + dataset['self_employed']
+dataset['c'] = dataset['work_interfere'] + \
+    '-' + dataset['mental_health_interview']
+dataset['d'] = dataset['work_interfere'] + '-' + dataset['obs_consequence']
+dataset['e'] = dataset['work_interfere'] + '-' + dataset['benefits']
+dataset['f'] = dataset['work_interfere'] + '-' + dataset['care_options']
+dataset['g'] = dataset['family_history'] + '-' + dataset['benefits']
+dataset['h'] = dataset['family_history'] + '-' + dataset['care_options']
+dataset['m'] = dataset['work_interfere'] + '-' + \
+    dataset['family_history'] + '-' + dataset['self_employed']
+X = dataset[['family_history', 'benefits', 'care_options', 'mental_health_interview',
+             'obs_consequence', 'self_employed', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
+             'm']]
+y = dataset['treatment']
+# Label Encoding of dataset
+columns = X.dtypes[X.dtypes == object].index
+le_map = {}
+for column in columns:
+    le = LabelEncoder()
+    X[column] = le.fit_transform(X[column])
+    le_map[column] = le
+le_y = LabelEncoder()
+y = le_y.fit_transform(y)
+ohe = OneHotEncoder(categorical_features=list(range(0, X.shape[1])))
+X = ohe.fit_transform(X).toarray()
+X = pd.DataFrame(X)
+y = pd.DataFrame(y)
+clf_cat = CatBoostClassifier(
+    learning_rate=0.009, depth=3, iterations=600, l2_leaf_reg=10)
+clf_cat.fit(X, y)
 
 
 @app.route('/getPrediction', methods=['POST'])
@@ -73,7 +113,9 @@ def process():
         X = dataset[['family_history', 'benefits', 'care_options', 'mental_health_interview',
                      'obs_consequence', 'self_employed', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'm']]
         for column in X.columns:
-            X[column] = le.fit_transform(X[column])
+            print(column)
+            le = le_map[column]
+            X[column] = le.transform(X[column])
         print(X)
         X = ohe.transform(X).toarray()
         X = pd.DataFrame(X)
@@ -117,27 +159,27 @@ def get():
         }],
         "work_interfere": [{
             "value": "Often",
-            "key": "often"
+            "key": "Often"
         }, {
             "value": "Rarely",
-            "key": "rarely"
+            "key": "Rarely"
         }, {
             "value": "Never",
-            "key": "never"
+            "key": "Never"
         }],
         "self_employed": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }],
         "family_history": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }],
         "no_employees": [{
             "value": "1-5",
@@ -160,74 +202,74 @@ def get():
         ],
         "remote_work": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }],
         "tech_company": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }],
         "benefits": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }, {
             "value": "Don't know",
             "key": "Don't know"
         }],
         "care_options": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }, {
             "value": "Not sure",
             "key": "Not sure"
         }],
         "wellness_program": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }, {
             "value": "Don't know",
             "key": "Don't know"
         }],
         "seek_help": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }, {
             "value": "Don't know",
             "key": "Don't know"
         }],
         "anonymity": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }, {
             "value": "Don't know",
             "key": "Don't know"
         }],
         "obs_consequence": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }],
         "leave": [{
             "value": "Somewhat easy",
@@ -247,80 +289,80 @@ def get():
         }
         ], "mental_health_consequence": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }, {
             "value": "Maybe",
             "key": "Maybe"
         }],
         "phys_health_consequence": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }, {
             "value": "Maybe",
             "key": "Maybe"
         }],
         "coworkers": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }, {
             "value": "Some of them",
             "key": "Some of them"
         }],
         "supervisor": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }, {
             "value": "Some of them",
             "key": "Some of them"
         }],
         "mental_health_interview": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }, {
             "value": "Maybe",
             "key": "Maybe"
         }],
         "phys_health_interview": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }, {
             "value": "Maybe",
             "key": "Maybe"
         }],
         "mental_vs_physical": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }, {
             "value": "Maybe",
             "key": "Maybe"
         }
         ], "phys_health_interview": [{
             "value": "Yes",
-            "key": "yes"
+            "key": "Yes"
         }, {
             "value": "No",
-            "key": "no"
+            "key": "No"
         }, {
             "value": "Maybe",
             "key": "Maybe"
