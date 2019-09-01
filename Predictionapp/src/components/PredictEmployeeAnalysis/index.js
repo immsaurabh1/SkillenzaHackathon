@@ -298,12 +298,12 @@ class PredictEmployee extends React.Component {
       if (response.data.output === 1) {
         this.setState({
           open: true,
-          dialogContent: "The employee needs the treatment"
+          dialogContent: "The employee needs the treatment(YES)"
         });
       } else {
         this.setState({
           open: true,
-          dialogContent: "The employee doesnot need the treatment"
+          dialogContent: "The employee doesnot need the treatment(NO)"
         });
       }
     } else {
@@ -845,7 +845,7 @@ class PredictEmployee extends React.Component {
               color="primary"
               onClick={() => this.postModelData()}
             >
-              get Prediction
+              Get Survey Result
             </SLStyledButton>
           </SlButtonFloatingPaper>
         </SlDiv>
